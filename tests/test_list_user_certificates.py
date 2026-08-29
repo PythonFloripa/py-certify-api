@@ -126,9 +126,6 @@ class ListUserCertificatesTestCase(unittest.TestCase):
             participant_email=self.email,
             participant_first_name="User",
             participant_last_name=str(order_id),
-            participant_cpf="12345678900",
-            participant_phone="48999999999",
-            participant_city="Florianopolis",
         )
 
 

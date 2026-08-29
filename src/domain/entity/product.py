@@ -7,8 +7,5 @@ class Product(BaseModel):
     certificate_details: str
     certificate_logo: Optional[str] = None
     certificate_background: Optional[str] = None
-    checkin_latitude: Optional[str] = None
-    checkin_longitude: Optional[str] = None
-    time_checkin: Optional[str] = None
 
     

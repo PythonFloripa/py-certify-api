@@ -132,36 +132,6 @@ class ParticipantRepositoryImpl(ParticipantRepository):
             logger.error(f"Erro ao buscar participante por email {email}: {str(e)}")
             raise
 
-    def get_by_cpf(self, cpf: str) -> Optional[Participant]:
-        try:
-            items = self.dynamodb_service.query_table(
-                self.table_name,
-                "cpf = :cpf",
-                {":cpf": cpf},
-                index_name="participants_by_cpf_idx",
-            )
-            if items:
-                return Participant(**items[0])
-            return None
-
-        except Exception as e:
-            logger.error(f"Erro ao buscar participante por CPF {cpf}: {str(e)}")
-            raise
-
-    def get_by_city(self, city: str) -> List[Participant]:
-        try:
-            items = self.dynamodb_service.query_table(
-                self.table_name,
-                "city = :city",
-                {":city": city},
-                index_name="participants_by_city_idx",
-            )
-            return [Participant(**item) for item in items]
-
-        except Exception as e:
-            logger.error(f"Erro ao buscar participantes por cidade {city}: {str(e)}")
-            raise
-
     def email_exists(self, email: str) -> bool:
         try:
             participant = self.get_by_email(email)
@@ -169,13 +139,4 @@ class ParticipantRepositoryImpl(ParticipantRepository):
 
         except Exception as e:
             logger.error(f"Erro ao verificar existência do email {email}: {str(e)}")
-            return False
-
-    def cpf_exists(self, cpf: str) -> bool:
-        try:
-            participant = self.get_by_cpf(cpf)
-            return participant is not None
-
-        except Exception as e:
-            logger.error(f"Erro ao verificar existência do CPF {cpf}: {str(e)}")
             return False

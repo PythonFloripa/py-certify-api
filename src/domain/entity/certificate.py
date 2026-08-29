@@ -18,6 +18,3 @@ class Certificate(BaseModel):
     participant_email: Optional[str]
     participant_first_name: Optional[str]
     participant_last_name: Optional[str]
-    participant_cpf: Optional[str]
-    participant_phone: Optional[str]
-    participant_city: Optional[str]

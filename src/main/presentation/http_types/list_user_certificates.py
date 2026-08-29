@@ -15,7 +15,6 @@ class UserCertificateItemResponse(BaseModel):
     product_id: Optional[int] = None
     participant_name: Optional[str] = None
     participant_email: Optional[str] = None
-    participant_document: Optional[str] = None
     certificate_url: Optional[str] = None
     created_at: Optional[str] = None
     updated_at: Optional[str] = None
