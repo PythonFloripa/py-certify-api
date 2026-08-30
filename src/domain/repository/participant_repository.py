@@ -1,5 +1,5 @@
 from abc import abstractmethod
-from typing import List, Optional
+from typing import Optional
 from src.domain.entity.participant import Participant
 from src.domain.repository.base_repository import BaseRepository
 
@@ -13,23 +13,8 @@ class ParticipantRepository(BaseRepository[Participant]):
     def get_by_email(self, email: str) -> Optional[Participant]:
         """Busca participante por email"""
         pass
-    
-    @abstractmethod
-    def get_by_cpf(self, cpf: str) -> Optional[Participant]:
-        """Busca participante por CPF"""
-        pass
-    
-    @abstractmethod
-    def get_by_city(self, city: str) -> List[Participant]:
-        """Busca participantes por cidade"""
-        pass
-    
+
     @abstractmethod
     def email_exists(self, email: str) -> bool:
         """Verifica se um email já existe"""
-        pass
-    
-    @abstractmethod
-    def cpf_exists(self, cpf: str) -> bool:
-        """Verifica se um CPF já existe"""
         pass

@@ -58,9 +58,6 @@ class DynamoDBRepositoryDerivationsTestCase(unittest.TestCase):
             participant_email=" User+Test@Example.com ",
             participant_first_name="User",
             participant_last_name="One",
-            participant_cpf="12345678900",
-            participant_phone="48999999999",
-            participant_city="Florianopolis",
         )
 
         item = repository._prepare_item(certificate)
@@ -80,15 +77,10 @@ class DynamoDBRepositoryDerivationsTestCase(unittest.TestCase):
             certificate_details="Detalhes",
             certificate_logo="logo.png",
             certificate_background="background.png",
-            checkin_latitude="-27.0",
-            checkin_longitude="-48.0",
             time_checkin="13:00",
             participant_email=" Test@Example.com ",
             participant_first_name="Test",
             participant_last_name="User",
-            participant_cpf="12345678900",
-            participant_phone="48999999999",
-            participant_city="Florianopolis",
         )
 
         item = repository._prepare_item(order)
@@ -105,9 +97,6 @@ class DynamoDBRepositoryDerivationsTestCase(unittest.TestCase):
             certificate_details="Detalhes",
             certificate_logo="logo.png",
             certificate_background=None,
-            checkin_latitude=None,
-            checkin_longitude=None,
-            time_checkin=None,
         )
 
         item = repository._prepare_item(product)

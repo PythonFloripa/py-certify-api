@@ -53,7 +53,6 @@ class FetchCertificateStrategy(ABC):
             product_id=certificate.product_id,
             participant_name=f"{certificate.participant_first_name or ''} {certificate.participant_last_name or ''}".strip(),
             participant_email=certificate.participant_email,
-            participant_document=certificate.participant_cpf,
             certificate_url=certificate.certificate_url,
             certificate_key=certificate.certificate_key,
             created_at=certificate.generated_date,
