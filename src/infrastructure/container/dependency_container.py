@@ -104,22 +104,22 @@ class DependencyContainer:
     def _create_certificate_repository(self) -> CertificateRepositoryImpl:
         """Cria uma instância do CertificateRepositoryImpl."""
         dynamodb_service = self.get('dynamodb_service')
-        return CertificateRepositoryImpl(dynamodb_service, "certificates")
+        return CertificateRepositoryImpl(dynamodb_service)
     
     def _create_participant_repository(self) -> ParticipantRepositoryImpl:
         """Cria uma instância do ParticipantRepositoryImpl."""
         dynamodb_service = self.get('dynamodb_service')
-        return ParticipantRepositoryImpl(dynamodb_service, "participants")
+        return ParticipantRepositoryImpl(dynamodb_service)
     
     def _create_product_repository(self) -> ProductRepositoryImpl:
         """Cria uma instância do ProductRepositoryImpl."""
         dynamodb_service = self.get('dynamodb_service')
-        return ProductRepositoryImpl(dynamodb_service, "products")
+        return ProductRepositoryImpl(dynamodb_service)
     
     def _create_order_repository(self) -> OrderRepositoryImpl:
         """Cria uma instância do OrderRepositoryImpl."""
         dynamodb_service = self.get('dynamodb_service')
-        return OrderRepositoryImpl(dynamodb_service, "orders")
+        return OrderRepositoryImpl(dynamodb_service)
     
     def _create_send_for_build_certificate(self):
         """
