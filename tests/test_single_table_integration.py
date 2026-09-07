@@ -274,29 +274,25 @@ def test_single_table_crud():
     certs_by_product = cert_repo.get_by_product_id(316)
     print(f"   Certificates por product_id: {len(certs_by_product)}")
 
-    print("\n12. Buscando Participants por city...")
-    participants_by_city = participant_repo.get_by_city("Florianopolis")
-    print(f"   Participants por city: {len(participants_by_city)}")
-
-    print("\n13. Atualizando Certificate (simulando sucesso)...")
+    print("\n12. Atualizando Certificate (simulando sucesso)...")
     certificate.success = True
     certificate.certificate_key = "cert-1001-key"
     updated_cert = cert_repo.update(str(cert_id), certificate)
     print(f"   Certificate atualizado: success={updated_cert.success if updated_cert else 'NONE'}")
 
-    print("\n14. Buscando Certificates bem-sucedidos...")
+    print("\n13. Buscando Certificates bem-sucedidos...")
     successful_certs = cert_repo.get_successful_certificates()
     print(f"   Certificates bem-sucedidos: {len(successful_certs)}")
 
-    print("\n15. Deletando Certificate...")
+    print("\n14. Deletando Certificate...")
     deleted = cert_repo.delete(str(cert_id))
     print(f"   Certificate deletado: {deleted}")
 
-    print("\n16. Listando todos os Certificates...")
+    print("\n15. Listando todos os Certificates...")
     all_certs = cert_repo.get_all()
     print(f"   Total de certificates: {len(all_certs)}")
 
-    print("\n17. Listando todos os Products...")
+    print("\n16. Listando todos os Products...")
     all_products = product_repo.get_all()
     print(f"   Total de products: {len(all_products)}")
 

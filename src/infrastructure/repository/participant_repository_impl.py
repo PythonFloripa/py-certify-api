@@ -140,33 +140,6 @@ class ParticipantRepositoryImpl(ParticipantRepository):
             logger.error(f"Erro ao buscar participante por email {email}: {str(e)}")
             raise
 
-    def get_by_cpf(self, cpf: str) -> Optional[Participant]:
-        try:
-            items = self.dynamodb_service.query_table(
-                "single",
-                "EntityType = :entity_type AND cpf = :cpf",
-                {":entity_type": EntityType.PARTICIPANT.value, ":cpf": cpf},
-            )
-            if items:
-                return Participant(**items[0])
-            return None
-        except Exception as e:
-            logger.error(f"Erro ao buscar participante por CPF {cpf}: {str(e)}")
-            raise
-
-    def get_by_city(self, city: str) -> List[Participant]:
-        try:
-            items = self.dynamodb_service.query_table(
-                "single",
-                "GSI5PK = :gsi5pk",
-                {":gsi5pk": f"CITY#{city}"},
-                index_name="GSI5",
-            )
-            return [Participant(**item) for item in items]
-        except Exception as e:
-            logger.error(f"Erro ao buscar participantes por cidade {city}: {str(e)}")
-            raise
-
     def email_exists(self, email: str) -> bool:
         try:
             participant = self.get_by_email(email)
@@ -175,28 +148,16 @@ class ParticipantRepositoryImpl(ParticipantRepository):
             logger.error(f"Erro ao verificar existência do email {email}: {str(e)}")
             return False
 
-    def cpf_exists(self, cpf: str) -> bool:
-        try:
-            participant = self.get_by_cpf(cpf)
-            return participant is not None
-        except Exception as e:
-            logger.error(f"Erro ao verificar existência do CPF {cpf}: {str(e)}")
-            return False
-
     def _prepare_item(self, entity: Participant) -> dict:
         item = entity.model_dump()
         participant_id = str(entity.id)
         email = _normalize_email(item.get("email"))
-        city = item.get("city")
 
         item["PK"] = pk(EntityType.PARTICIPANT, participant_id)
         item["SK"] = sk(EntityType.PARTICIPANT, participant_id)
         item["EntityType"] = EntityType.PARTICIPANT.value
         item["GSI2PK"] = gsi1pk_email(email) if email else None
         item["GSI2SK"] = f"PARTICIPANT#{participant_id}"
-        if city:
-            item["GSI5PK"] = f"CITY#{city}"
-            item["GSI5SK"] = f"PARTICIPANT#{participant_id}"
         item["id"] = participant_id
         item["email"] = email
         return {k: v for k, v in item.items() if v is not None}

@@ -69,14 +69,6 @@ def gsi3sk_certificate(order_id: int) -> str:
     return f"CERTIFICATE#{order_id}"
 
 
-def gsi4pk_city(city: str) -> str:
-    return f"CITY#{city}"
-
-
-def gsi4sk_participant(participant_id: str) -> str:
-    return f"PARTICIPANT#{participant_id}"
-
-
 def gsi1pk_cert_id(cert_id: str) -> str:
     return f"CERT#{cert_id}"
 
