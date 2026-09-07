@@ -237,8 +237,6 @@ Este projeto utiliza o padrão DynamoDB Single-Table Design, onde todas as entid
 | `GSI3SK` | String | Chave de Ordenação do GSI3 |
 | `GSI4PK` | String | Chave de Partição do GSI4 |
 | `GSI4SK` | String | Chave de Ordenação do GSI4 |
-| `GSI5PK` | String | Chave de Partição do GSI5 |
-| `GSI5SK` | String | Chave de Ordenação do GSI5 |
 | `EntityType` | String | Tipo da entidade (ORDER, CERTIFICATE, PRODUCT, PARTICIPANT) |
 
 ### GSIs (Global Secondary Indexes)
@@ -249,7 +247,6 @@ Este projeto utiliza o padrão DynamoDB Single-Table Design, onde todas as entid
 | GSI2 | `PK: email, SK: ENTITY#` | Orders, Certificates, Participants by email |
 | GSI3 | `PK: product, SK: ENTITY#` | Products by name, Certificates/Orders by product |
 | GSI4 | `PK: SUCCESS#Y/N, SK: CERT#` | Successful/Failed certificates |
-| GSI5 | `PK: CITY#name, SK: PART#` | Participants by city |
 
 ### Entidades e Keys
 
@@ -292,8 +289,6 @@ Este projeto utiliza o padrão DynamoDB Single-Table Design, onde todas as entid
 | SK | `PARTICIPANT#<uuid>` |
 | GSI2PK | `EMAIL#<normalized_email>` |
 | GSI2SK | `PARTICIPANT#<uuid>` |
-| GSI5PK | `CITY#<city>` |
-| GSI5SK | `PARTICIPANT#<uuid>` |
 
 ### Normalização de Email
 
@@ -309,4 +304,4 @@ Cada repositório implementa operações CRUD usando as chaves apropriadas:
 - **OrderRepositoryImpl**: GSI2 (email), GSI3 (product)
 - **CertificateRepositoryImpl**: GSI1 (UUID), GSI2 (email), GSI3 (product), GSI4 (success)
 - **ProductRepositoryImpl**: GSI3 (name)
-- **ParticipantRepositoryImpl**: GSI2 (email), GSI5 (city)
+- **ParticipantRepositoryImpl**: GSI2 (email)
