@@ -218,3 +218,90 @@ Gera uma página para download de um certificado.
   - `test_list_user_certificates("suzi.harima94@gmail.com", success="false")`
 - Testar e-mail com URL encoding:
   - `test_list_user_certificates("user+qa@example.com")`
+
+## DynamoDB Single-Table Design
+
+Este projeto utiliza o padrão DynamoDB Single-Table Design, onde todas as entidades (Orders, Certificates, Products, Participants) são armazenadas em uma única tabela DynamoDB.
+
+### Estrutura da Tabela
+
+| Atributo | Tipo | Descrição |
+|----------|------|-----------|
+| `PK` | String | Chave de Partição principal |
+| `SK` | String | Chave de Ordenação principal |
+| `GSI1PK` | String | Chave de Partição do GSI1 |
+| `GSI1SK` | String | Chave de Ordenação do GSI1 |
+| `GSI2PK` | String | Chave de Partição do GSI2 |
+| `GSI2SK` | String | Chave de Ordenação do GSI2 |
+| `GSI3PK` | String | Chave de Partição do GSI3 |
+| `GSI3SK` | String | Chave de Ordenação do GSI3 |
+| `GSI4PK` | String | Chave de Partição do GSI4 |
+| `GSI4SK` | String | Chave de Ordenação do GSI4 |
+| `EntityType` | String | Tipo da entidade (ORDER, CERTIFICATE, PRODUCT, PARTICIPANT) |
+
+### GSIs (Global Secondary Indexes)
+
+| GSI | Key Schema | Access Pattern |
+|-----|------------|----------------|
+| GSI1 | `PK: UUID, SK: CERT#` | Certificate by UUID |
+| GSI2 | `PK: email, SK: ENTITY#` | Orders, Certificates, Participants by email |
+| GSI3 | `PK: product, SK: ENTITY#` | Products by name, Certificates/Orders by product |
+| GSI4 | `PK: SUCCESS#Y/N, SK: CERT#` | Successful/Failed certificates |
+
+### Entidades e Keys
+
+#### Certificate
+| Key | Value |
+|-----|-------|
+| PK | `CERTIFICATE#<uuid>` |
+| SK | `CERTIFICATE#<uuid>` |
+| GSI1PK | `<uuid>` |
+| GSI1SK | `CERTIFICATE#<uuid>` |
+| GSI2PK | `EMAIL#<normalized_email>` |
+| GSI2SK | `CERTIFICATE#<order_id>` |
+| GSI3PK | `PRODUCT#<product_id>` |
+| GSI3SK | `CERTIFICATE#<order_id>` |
+| GSI4PK | `SUCCESS#<true/false>` |
+| GSI4SK | `CERTIFICATE#<uuid>` |
+
+#### Order
+| Key | Value |
+|-----|-------|
+| PK | `ORDER#<order_id>` |
+| SK | `ORDER#<order_id>` |
+| GSI2PK | `EMAIL#<normalized_email>` |
+| GSI2SK | `ORDER#<order_id>` |
+| GSI3PK | `PRODUCT#<product_id>` |
+| GSI3SK | `ORDER#<order_id>` |
+
+#### Product
+| Key | Value |
+|-----|-------|
+| PK | `PRODUCT#<product_id>` |
+| SK | `PRODUCT#<product_id>` |
+| GSI3PK | `PRODUCT#<product_name>` |
+| GSI3SK | `PRODUCT#<product_id>` |
+
+#### Participant
+| Key | Value |
+|-----|-------|
+| PK | `PARTICIPANT#<uuid>` |
+| SK | `PARTICIPANT#<uuid>` |
+| GSI2PK | `EMAIL#<normalized_email>` |
+| GSI2SK | `PARTICIPANT#<uuid>` |
+
+### Normalização de Email
+
+Emails são normalizados para consistência:
+- Convertido para minúsculas
+- Remoção de pontos antes do `@` (Gmail)
+- Remoção de `+` e tudo após
+
+### Repositórios
+
+Cada repositório implementa operações CRUD usando as chaves apropriadas:
+
+- **OrderRepositoryImpl**: GSI2 (email), GSI3 (product)
+- **CertificateRepositoryImpl**: GSI1 (UUID), GSI2 (email), GSI3 (product), GSI4 (success)
+- **ProductRepositoryImpl**: GSI3 (name)
+- **ParticipantRepositoryImpl**: GSI2 (email)

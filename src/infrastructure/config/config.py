@@ -18,64 +18,28 @@ class Config(BaseSettings):
         env_file_encoding = "utf-8"
     
     @property
-    def dynamodb_tables(self) -> Dict[str, Dict[str, str]]:
+    def dynamodb_table(self) -> Dict[str, str]:
         """
-        Retorna as configurações das tabelas do DynamoDB baseadas no ambiente.
-        Segue o padrão da infraestrutura Terraform criada.
+        Retorna a configuração da tabela única do DynamoDB baseada no ambiente.
+        Single Table Design - todas as entidades em uma única tabela.
         """
         base_name = f"{self.PROJECT_NAME}"
         environment = self.ENVIRONMENT
         
         return {
-            "certificates": {
-                "name": f"{base_name}-certificates-{environment}",
-                "arn": f"arn:aws:dynamodb:{self.REGION}:*:table/{base_name}-certificates-{environment}"
-            },
-            "orders": {
-                "name": f"{base_name}-orders-{environment}",
-                "arn": f"arn:aws:dynamodb:{self.REGION}:*:table/{base_name}-orders-{environment}"
-            },
-            "participants": {
-                "name": f"{base_name}-participants-{environment}",
-                "arn": f"arn:aws:dynamodb:{self.REGION}:*:table/{base_name}-participants-{environment}"
-            },
-            "products": {
-                "name": f"{base_name}-products-{environment}",
-                "arn": f"arn:aws:dynamodb:{self.REGION}:*:table/{base_name}-products-{environment}"
-            }
+            "name": f"{base_name}-{environment}",
+            "arn": f"arn:aws:dynamodb:{self.REGION}:*:table/{base_name}-{environment}"
         }
     
-    def get_table_name(self, entity: str) -> str:
-        """
-        Retorna o nome da tabela para uma entidade específica.
-        
-        Args:
-            entity: Nome da entidade (certificates, orders, participants, products)
-            
-        Returns:
-            str: Nome da tabela no DynamoDB
-        """
-        tables = self.dynamodb_tables
-        if entity not in tables:
-            raise ValueError(f"Entidade '{entity}' não encontrada. Entidades disponíveis: {list(tables.keys())}")
-        
-        return tables[entity]["name"]
+    @property
+    def dynamodb_tables(self) -> Dict[str, Dict[str, str]]:
+        return {"single": self.dynamodb_table}
     
-    def get_table_arn(self, entity: str) -> str:
-        """
-        Retorna o ARN da tabela para uma entidade específica.
-        
-        Args:
-            entity: Nome da entidade (certificates, orders, participants, products)
-            
-        Returns:
-            str: ARN da tabela no DynamoDB
-        """
-        tables = self.dynamodb_tables
-        if entity not in tables:
-            raise ValueError(f"Entidade '{entity}' não encontrada. Entidades disponíveis: {list(tables.keys())}")
-        
-        return tables[entity]["arn"]
+    def get_table_name(self, entity: str = None) -> str:
+        return self.dynamodb_table["name"]
+    
+    def get_table_arn(self, entity: str = None) -> str:
+        return self.dynamodb_table["arn"]
 
 
 config = Config()
