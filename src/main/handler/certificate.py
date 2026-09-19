@@ -20,6 +20,7 @@ from src.application.fetch_order_tech_floripa import FetchOrderTechFloripa
 from src.application.fetch_certificate import FetchCertificate
 from src.application.download_certificate import DownloadCertificate
 from src.application.list_user_certificates import ListUserCertificates
+from src.application.validate_certificate_background import ValidateCertificateBackground
 from src.infrastructure.container.dependency_container import container
 
 
@@ -156,6 +157,12 @@ def create_certificates_handler(request: CreateCertificatesRequest) -> BuildOrde
 
     create_certificate: CreateCertificate = container.get('create_certificate')
     send_for_build_certificate: SendForBuildCertificate = container.get('send_for_build_certificate')
+    validate_certificate_background: ValidateCertificateBackground = container.get('validate_certificate_background')
+
+    # Recusa o lote antes de gravar ou enfileirar qualquer coisa se o fundo estiver fora do padrão
+    validate_certificate_background.execute(
+        cert.certificate_background for cert in request.certificates
+    )
 
     # Converte os certificados recebidos para TechOrdersResponse
     tech_orders: List[TechOrdersResponse] = [

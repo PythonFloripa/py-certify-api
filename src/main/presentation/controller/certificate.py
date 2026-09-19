@@ -29,6 +29,7 @@ from src.main.presentation.template_loader import template_loader
 from src.domain.response.build_order import BuildOrderResponse
 from src.domain.response.failed import FailedResponse
 from src.domain.exception.certificate_not_found import CertificateNotFound
+from src.domain.exception.invalid_certificate_background import InvalidCertificateBackground
 
 
 logger = logging.getLogger(__name__)
@@ -50,7 +51,7 @@ def create_certificate() -> BuildOrderResponse:
 
 
 @app.post(f"{config.PREFIX_API_VERSION}/certificate/create-batch")
-def create_certificates() -> BuildOrderResponse:
+def create_certificates() -> BuildOrderResponse | FailedResponse:
     """
     Endpoint para receber uma lista de certificados e processá-los.
     Recebe uma lista de objetos de certificado e processa cada um deles.
@@ -59,6 +60,17 @@ def create_certificates() -> BuildOrderResponse:
         request: CreateCertificatesRequest = parse(app.current_event.body, CreateCertificatesRequest)
         response: BuildOrderResponse = create_certificates_handler(request)
         return response
+    except InvalidCertificateBackground as e:
+        logger.warning(f"Lote recusado, fundo do certificado fora do padrão: {e}")
+        return Response(
+            status_code=422,
+            content_type="application/json",
+            body=FailedResponse(
+                details=e.url or "",
+                message=e.message,
+                status=422
+            )
+        )
     except Exception as e:
         logger.error(f"Erro ao processar a requisição de certificados em lote: {e}")
         return FailedResponse(
