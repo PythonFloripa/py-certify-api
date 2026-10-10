@@ -63,9 +63,15 @@ class DynamoDBRepositoryDerivationsTestCase(unittest.TestCase):
         item = repository._prepare_item(certificate)
 
         self.assertEqual(item["participant_email"], "user+test@example.com")
-        self.assertEqual(item["participant_email_product_key"], "user+test@example.com#100")
+        self.assertEqual(item["GSI1PK"], f"CERT#{certificate.id}")
+        self.assertEqual(item["GSI2PK"], "EMAIL#user+test@example.com")
+        self.assertEqual(item["GSI3PK"], "PRODUCT#100")
+        self.assertEqual(item["GSI4PK"], "SUCCESS#1")
         self.assertEqual(item["success_flag"], 1)
         self.assertEqual(item["id"], str(certificate.id))
+        self.assertEqual(item["PK"], "CERTIFICATE#1")
+        self.assertEqual(item["SK"], "CERTIFICATE#1")
+        self.assertEqual(item["EntityType"], "CERTIFICATE")
 
     def test_order_prepare_item_adds_month_and_sort_key(self):
         repository = OrderRepositoryImpl(FakeDynamoDBService())
