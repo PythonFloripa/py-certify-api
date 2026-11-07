@@ -1,13 +1,12 @@
 from typing import Optional
 from pydantic import BaseModel
-import uuid
+
 
 class FetchCertificateRequestDto(BaseModel):
-
     order_id: Optional[int] = None
     email: Optional[str] = None
     product_id: Optional[int] = None
-    
+
     def __str__(self) -> str:
         params = []
         if self.order_id:
@@ -31,10 +30,11 @@ class FetchCertificateResponseDto(BaseModel):
     updated_at: Optional[str] = None
     email: Optional[str] = None
     success: bool = True
-    
-    
+
     def __str__(self) -> str:
         if self.success and self.id:
-            return f"FetchCertificateResponseDto(id={self.id}, order_id={self.order_id})"
+            return (
+                f"FetchCertificateResponseDto(id={self.id}, order_id={self.order_id})"
+            )
         else:
             return f"FetchCertificateResponseDto(success={self.success})"

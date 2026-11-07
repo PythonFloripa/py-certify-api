@@ -31,7 +31,9 @@ class ProductRepositoryImpl(ProductRepository):
 
     def get_by_id(self, entity_id: int) -> Optional[Product]:
         try:
-            item = self.dynamodb_service.get_item({"product_id": entity_id}, self.table_name)
+            item = self.dynamodb_service.get_item(
+                {"product_id": entity_id}, self.table_name
+            )
             if item:
                 return Product(**item)
             return None
@@ -95,7 +97,9 @@ class ProductRepositoryImpl(ProductRepository):
             )
 
             if "Attributes" in response:
-                result_dict = self.dynamodb_service._convert_from_dynamodb_format(response["Attributes"])
+                result_dict = self.dynamodb_service._convert_from_dynamodb_format(
+                    response["Attributes"]
+                )
                 return Product(**result_dict)
             return None
 
@@ -105,7 +109,9 @@ class ProductRepositoryImpl(ProductRepository):
 
     def delete(self, entity_id: int) -> bool:
         try:
-            self.dynamodb_service.delete_item({"product_id": entity_id}, self.table_name)
+            self.dynamodb_service.delete_item(
+                {"product_id": entity_id}, self.table_name
+            )
             return True
 
         except Exception as e:
@@ -117,7 +123,9 @@ class ProductRepositoryImpl(ProductRepository):
             return self.get_by_id(entity_id) is not None
 
         except Exception as e:
-            logger.error(f"Erro ao verificar existência do produto {entity_id}: {str(e)}")
+            logger.error(
+                f"Erro ao verificar existência do produto {entity_id}: {str(e)}"
+            )
             return False
 
     def get_by_product_id(self, product_id: int) -> Optional[Product]:
@@ -125,7 +133,9 @@ class ProductRepositoryImpl(ProductRepository):
             return self.get_by_id(product_id)
 
         except Exception as e:
-            logger.error(f"Erro ao buscar produto por product_id {product_id}: {str(e)}")
+            logger.error(
+                f"Erro ao buscar produto por product_id {product_id}: {str(e)}"
+            )
             raise
 
     def get_by_name(self, product_name: str) -> List[Product]:
@@ -173,5 +183,7 @@ class ProductRepositoryImpl(ProductRepository):
     def _prepare_item(self, entity: Product) -> dict:
         item = entity.model_dump()
         item["has_certificate_logo_flag"] = _flag(item.get("certificate_logo"))
-        item["has_certificate_background_flag"] = _flag(item.get("certificate_background"))
+        item["has_certificate_background_flag"] = _flag(
+            item.get("certificate_background")
+        )
         return item

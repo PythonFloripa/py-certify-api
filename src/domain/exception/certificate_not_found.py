@@ -1,9 +1,13 @@
 from typing import Optional
 
 
-
 class CertificateNotFound(Exception):
-    def __init__(self, order_id: Optional[int] = None, product_id: Optional[int] = None, email: Optional[str] = None):
+    def __init__(
+        self,
+        order_id: Optional[int] = None,
+        product_id: Optional[int] = None,
+        email: Optional[str] = None,
+    ):
         self.message = "Certificate not found"
         self.order_id = order_id
         self.product_id = product_id
@@ -19,4 +23,3 @@ class CertificateNotFound(Exception):
             return f"Certificate not found for email: {self.email}"
         else:
             return self.message
-    

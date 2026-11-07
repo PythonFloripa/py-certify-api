@@ -9,8 +9,12 @@ from PIL import Image
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
-from src.application.validate_certificate_background import ValidateCertificateBackground
-from src.domain.exception.invalid_certificate_background import InvalidCertificateBackground
+from src.application.validate_certificate_background import (
+    ValidateCertificateBackground,
+)
+from src.domain.exception.invalid_certificate_background import (
+    InvalidCertificateBackground,
+)
 
 
 def _image_bytes(size, image_format="PNG") -> bytes:
@@ -20,7 +24,9 @@ def _image_bytes(size, image_format="PNG") -> bytes:
 
 
 def _response(url: str, content: bytes, status_code: int = 200) -> httpx.Response:
-    return httpx.Response(status_code, content=content, request=httpx.Request("GET", url))
+    return httpx.Response(
+        status_code, content=content, request=httpx.Request("GET", url)
+    )
 
 
 class ValidateCertificateBackgroundTestCase(unittest.TestCase):

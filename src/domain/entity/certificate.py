@@ -2,6 +2,7 @@ from pydantic import BaseModel, Field
 from typing import Optional
 import uuid
 
+
 class Certificate(BaseModel):
     id: uuid.UUID = Field(default_factory=uuid.uuid4)
     success: Optional[bool] = Field(default=False)

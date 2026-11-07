@@ -16,7 +16,9 @@ def _normalize_email(email: Optional[str]) -> Optional[str]:
     return email.strip().lower()
 
 
-def _email_product_key(email: Optional[str], product_id: Optional[int]) -> Optional[str]:
+def _email_product_key(
+    email: Optional[str], product_id: Optional[int]
+) -> Optional[str]:
     normalized_email = _normalize_email(email)
     if not normalized_email or product_id is None:
         return None
@@ -28,7 +30,9 @@ def _success_flag(success: Optional[bool]) -> int:
 
 
 class CertificateRepositoryImpl(CertificateRepository):
-    def __init__(self, dynamodb_service: DynamoDBService, table_name: str = "certificates"):
+    def __init__(
+        self, dynamodb_service: DynamoDBService, table_name: str = "certificates"
+    ):
         self.dynamodb_service = dynamodb_service
         self.table_name = table_name
 
@@ -99,7 +103,9 @@ class CertificateRepositoryImpl(CertificateRepository):
             )
 
             if "Attributes" in response:
-                result_dict = self.dynamodb_service._convert_from_dynamodb_format(response["Attributes"])
+                result_dict = self.dynamodb_service._convert_from_dynamodb_format(
+                    response["Attributes"]
+                )
                 return Certificate(**result_dict)
             return None
 
@@ -113,7 +119,9 @@ class CertificateRepositoryImpl(CertificateRepository):
             if not certificate:
                 return False
 
-            self.dynamodb_service.delete_item({"order_id": certificate.order_id}, self.table_name)
+            self.dynamodb_service.delete_item(
+                {"order_id": certificate.order_id}, self.table_name
+            )
             logger.info(f"Certificado {entity_id} removido com sucesso")
             return True
 
@@ -126,7 +134,9 @@ class CertificateRepositoryImpl(CertificateRepository):
             return self.get_by_id(entity_id, order_id) is not None
 
         except Exception as e:
-            logger.error(f"Erro ao verificar existência do certificado {entity_id}: {str(e)}")
+            logger.error(
+                f"Erro ao verificar existência do certificado {entity_id}: {str(e)}"
+            )
             return False
 
     def find_by_id(self, entity_id: Union[str, uuid.UUID]) -> Optional[Certificate]:
@@ -148,13 +158,17 @@ class CertificateRepositoryImpl(CertificateRepository):
 
     def get_by_order_id(self, order_id: int) -> List[Certificate]:
         try:
-            item = self.dynamodb_service.get_item({"order_id": order_id}, self.table_name)
+            item = self.dynamodb_service.get_item(
+                {"order_id": order_id}, self.table_name
+            )
             if not item:
                 return []
             return [Certificate(**item)]
 
         except Exception as e:
-            logger.error(f"Erro ao buscar certificados por order_id {order_id}: {str(e)}")
+            logger.error(
+                f"Erro ao buscar certificados por order_id {order_id}: {str(e)}"
+            )
             raise
 
     def get_by_participant_email(self, email: str) -> List[Certificate]:
@@ -172,7 +186,9 @@ class CertificateRepositoryImpl(CertificateRepository):
             logger.error(f"Erro ao buscar certificados por email {email}: {str(e)}")
             raise
 
-    def get_by_email_and_product_id(self, email: str, product_id: int) -> List[Certificate]:
+    def get_by_email_and_product_id(
+        self, email: str, product_id: int
+    ) -> List[Certificate]:
         try:
             items = self.dynamodb_service.query_table(
                 self.table_name,
@@ -191,7 +207,9 @@ class CertificateRepositoryImpl(CertificateRepository):
             return certificates
 
         except Exception as e:
-            logger.error(f"Erro ao buscar certificados por email {email} e product_id {product_id}: {str(e)}")
+            logger.error(
+                f"Erro ao buscar certificados por email {email} e product_id {product_id}: {str(e)}"
+            )
             raise
 
     def get_by_product_id(self, product_id: int) -> List[Certificate]:
@@ -206,7 +224,9 @@ class CertificateRepositoryImpl(CertificateRepository):
             return [Certificate(**item) for item in items]
 
         except Exception as e:
-            logger.error(f"Erro ao buscar certificados por product_id {product_id}: {str(e)}")
+            logger.error(
+                f"Erro ao buscar certificados por product_id {product_id}: {str(e)}"
+            )
             raise
 
     def get_successful_certificates(self) -> List[Certificate]:

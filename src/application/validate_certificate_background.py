@@ -5,7 +5,9 @@ from typing import Iterable
 import httpx
 from PIL import Image, UnidentifiedImageError
 
-from src.domain.exception.invalid_certificate_background import InvalidCertificateBackground
+from src.domain.exception.invalid_certificate_background import (
+    InvalidCertificateBackground,
+)
 
 logger = logging.getLogger(__name__)
 

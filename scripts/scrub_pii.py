@@ -78,7 +78,9 @@ def _chaves_da_tabela(client, table_name: str) -> list[str]:
     return [k["AttributeName"] for k in descricao["Table"]["KeySchema"]]
 
 
-def _projecao(chaves: list[str], atributos_alvo: list[str]) -> tuple[str, dict[str, str]]:
+def _projecao(
+    chaves: list[str], atributos_alvo: list[str]
+) -> tuple[str, dict[str, str]]:
     """
     Monta uma ProjectionExpression que busca apenas as chaves + os atributos-alvo
     (evita puxar o item inteiro, minimizando o manuseio de PII).
@@ -173,7 +175,8 @@ def main(argv: Optional[list[str]] = None) -> int:
 
     if args.apply:
         logger.warning(
-            "*** MODO --apply: alterações serão gravadas em %s ***", list(alvos.values())
+            "*** MODO --apply: alterações serão gravadas em %s ***",
+            list(alvos.values()),
         )
     else:
         logger.info("Modo DRY-RUN (nada será gravado). Use --apply para efetivar.")

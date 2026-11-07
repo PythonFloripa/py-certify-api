@@ -17,7 +17,9 @@ def _normalize_email(email: Optional[str]) -> Optional[str]:
 
 
 class ParticipantRepositoryImpl(ParticipantRepository):
-    def __init__(self, dynamodb_service: DynamoDBService, table_name: str = "participants"):
+    def __init__(
+        self, dynamodb_service: DynamoDBService, table_name: str = "participants"
+    ):
         self.dynamodb_service = dynamodb_service
         self.table_name = table_name
 
@@ -91,7 +93,9 @@ class ParticipantRepositoryImpl(ParticipantRepository):
             )
 
             if "Attributes" in response:
-                result_dict = self.dynamodb_service._convert_from_dynamodb_format(response["Attributes"])
+                result_dict = self.dynamodb_service._convert_from_dynamodb_format(
+                    response["Attributes"]
+                )
                 return Participant(**result_dict)
             return None
 
@@ -113,7 +117,9 @@ class ParticipantRepositoryImpl(ParticipantRepository):
             return self.get_by_id(entity_id) is not None
 
         except Exception as e:
-            logger.error(f"Erro ao verificar existência do participante {entity_id}: {str(e)}")
+            logger.error(
+                f"Erro ao verificar existência do participante {entity_id}: {str(e)}"
+            )
             return False
 
     def get_by_email(self, email: str) -> Optional[Participant]:

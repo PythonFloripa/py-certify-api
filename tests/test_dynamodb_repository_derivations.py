@@ -30,7 +30,9 @@ sys.modules.setdefault("boto3", boto3_module)
 from src.domain.entity.certificate import Certificate
 from src.domain.entity.order import Order
 from src.domain.entity.product import Product
-from src.infrastructure.repository.certificate_repository_impl import CertificateRepositoryImpl
+from src.infrastructure.repository.certificate_repository_impl import (
+    CertificateRepositoryImpl,
+)
 from src.infrastructure.repository.order_repository_impl import OrderRepositoryImpl
 from src.infrastructure.repository.product_repository_impl import ProductRepositoryImpl
 
@@ -63,7 +65,9 @@ class DynamoDBRepositoryDerivationsTestCase(unittest.TestCase):
         item = repository._prepare_item(certificate)
 
         self.assertEqual(item["participant_email"], "user+test@example.com")
-        self.assertEqual(item["participant_email_product_key"], "user+test@example.com#100")
+        self.assertEqual(
+            item["participant_email_product_key"], "user+test@example.com#100"
+        )
         self.assertEqual(item["success_flag"], 1)
         self.assertEqual(item["id"], str(certificate.id))
 

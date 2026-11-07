@@ -60,7 +60,9 @@ class OrderRepositoryImpl(OrderRepository):
 
     def get_by_id(self, entity_id: int) -> Optional[Order]:
         try:
-            item = self.dynamodb_service.get_item({"order_id": entity_id}, self.table_name)
+            item = self.dynamodb_service.get_item(
+                {"order_id": entity_id}, self.table_name
+            )
             if item:
                 return Order(**item)
             return None
@@ -124,7 +126,9 @@ class OrderRepositoryImpl(OrderRepository):
             )
 
             if "Attributes" in response:
-                result_dict = self.dynamodb_service._convert_from_dynamodb_format(response["Attributes"])
+                result_dict = self.dynamodb_service._convert_from_dynamodb_format(
+                    response["Attributes"]
+                )
                 return Order(**result_dict)
             return None
 
@@ -146,7 +150,9 @@ class OrderRepositoryImpl(OrderRepository):
             return self.get_by_id(entity_id) is not None
 
         except Exception as e:
-            logger.error(f"Erro ao verificar existência do pedido {entity_id}: {str(e)}")
+            logger.error(
+                f"Erro ao verificar existência do pedido {entity_id}: {str(e)}"
+            )
             return False
 
     def get_by_order_id(self, order_id: int) -> Optional[Order]:
@@ -184,7 +190,9 @@ class OrderRepositoryImpl(OrderRepository):
             return [Order(**item) for item in items]
 
         except Exception as e:
-            logger.error(f"Erro ao buscar pedidos por product_id {product_id}: {str(e)}")
+            logger.error(
+                f"Erro ao buscar pedidos por product_id {product_id}: {str(e)}"
+            )
             raise
 
     def get_orders_by_date_range(self, start_date: str, end_date: str) -> List[Order]:
@@ -201,7 +209,9 @@ class OrderRepositoryImpl(OrderRepository):
             while current_month <= final_month:
                 month_key = current_month.strftime("%Y-%m")
                 month_start = max(start_dt, current_month)
-                next_month = (current_month.replace(day=28) + timedelta(days=4)).replace(day=1)
+                next_month = (
+                    current_month.replace(day=28) + timedelta(days=4)
+                ).replace(day=1)
                 month_end_boundary = next_month - timedelta(microseconds=1)
                 month_end = min(end_dt, month_end_boundary)
 
@@ -221,12 +231,16 @@ class OrderRepositoryImpl(OrderRepository):
             return [Order(**item) for item in items]
 
         except Exception as e:
-            logger.error(f"Erro ao buscar pedidos por intervalo de datas {start_date} - {end_date}: {str(e)}")
+            logger.error(
+                f"Erro ao buscar pedidos por intervalo de datas {start_date} - {end_date}: {str(e)}"
+            )
             raise
 
     def _prepare_item(self, entity: Order) -> dict:
         item = entity.model_dump()
         item["participant_email"] = _normalize_email(item["participant_email"])
         item["order_year_month"] = _order_year_month(item["order_date"])
-        item["order_date_order_id"] = _order_date_order_id(item["order_date"], item["order_id"])
+        item["order_date_order_id"] = _order_date_order_id(
+            item["order_date"], item["order_id"]
+        )
         return item

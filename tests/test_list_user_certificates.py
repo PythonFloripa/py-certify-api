@@ -5,7 +5,9 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
-from src.application.dto.list_user_certificates_dto import ListUserCertificatesRequestDto
+from src.application.dto.list_user_certificates_dto import (
+    ListUserCertificatesRequestDto,
+)
 from src.application.list_user_certificates import ListUserCertificates
 from src.domain.entity.certificate import Certificate
 
@@ -53,7 +55,9 @@ class ListUserCertificatesTestCase(unittest.TestCase):
         response = service.execute(ListUserCertificatesRequestDto(email=self.email))
 
         self.assertEqual(response.email, self.email)
-        self.assertEqual([item.order_id for item in response.certificates], [3, 4, 1, 2])
+        self.assertEqual(
+            [item.order_id for item in response.certificates], [3, 4, 1, 2]
+        )
 
     def test_filters_success_true_before_sorting(self):
         service = ListUserCertificates(FakeCertificateRepository(self.certificates))
@@ -104,7 +108,9 @@ class ListUserCertificatesTestCase(unittest.TestCase):
         repository = FakeCertificateRepository([])
         service = ListUserCertificates(repository)
 
-        response = service.execute(ListUserCertificatesRequestDto(email=self.encoded_email))
+        response = service.execute(
+            ListUserCertificatesRequestDto(email=self.encoded_email)
+        )
 
         self.assertEqual(repository.last_email, self.encoded_email)
         self.assertEqual(response.email, self.encoded_email)

@@ -4,6 +4,7 @@ from typing import List, Optional
 
 class CertificateItemRequest(BaseModel):
     """Modelo para um item individual de certificado na lista"""
+
     order_id: int
     first_name: str
     last_name: str
@@ -19,5 +20,5 @@ class CertificateItemRequest(BaseModel):
 
 class CreateCertificatesRequest(BaseModel):
     """Request para criação de múltiplos certificados"""
-    certificates: List[CertificateItemRequest]
 
+    certificates: List[CertificateItemRequest]
