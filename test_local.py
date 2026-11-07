@@ -256,7 +256,7 @@ def test_fetch_certificate_by_email():
     print("🧪 Testando endpoint de busca de certificados por email...")
 
     # Dados de teste
-    request_data = {"email": "suzi.harima94@gmail.com"}
+    request_data = {"email": "alex@example.test"}
 
     # Cria evento simulado
     event = create_api_gateway_event(
@@ -306,7 +306,7 @@ def test_fetch_certificate_by_email_and_product_id():
     print("🧪 Testando endpoint de busca de certificados por email e product_id...")
 
     # Dados de teste
-    request_data = {"email": "suzi.harima94@gmail.com", "product_id": "1678"}
+    request_data = {"email": "alex@example.test", "product_id": "42"}
 
     # Cria evento simulado
     event = create_api_gateway_event(
@@ -354,9 +354,9 @@ def test_fetch_certificate_by_email_and_product_id():
 if __name__ == "__main__":
     # Executa os testes
     # test_create_certificate()
-    # test_list_user_certificates("suzi.harima94@gmail.com")
-    # test_list_user_certificates("suzi.harima94@gmail.com", success="true")
-    # test_list_user_certificates("suzi.harima94@gmail.com", success="false")
+    # test_list_user_certificates("alex@example.test")
+    # test_list_user_certificates("alex@example.test", success="true")
+    # test_list_user_certificates("alex@example.test", success="false")
     test_fetch_certificate_by_order_id()
     test_fetch_certificate_by_product_id()
     test_fetch_certificate_by_email()
