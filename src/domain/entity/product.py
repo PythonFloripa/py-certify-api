@@ -1,5 +1,6 @@
-from pydantic import BaseModel, Field
+from pydantic import BaseModel
 from typing import Optional
+
 
 class Product(BaseModel):
     product_id: int
@@ -7,5 +8,3 @@ class Product(BaseModel):
     certificate_details: str
     certificate_logo: Optional[str] = None
     certificate_background: Optional[str] = None
-
-    

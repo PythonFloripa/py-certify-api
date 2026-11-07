@@ -22,18 +22,24 @@ class ListUserCertificates:
 
         self.certificate_repository = certificate_repository
 
-    def execute(self, request: ListUserCertificatesRequestDto) -> ListUserCertificatesResponseDto:
+    def execute(
+        self, request: ListUserCertificatesRequestDto
+    ) -> ListUserCertificatesResponseDto:
         logger.info(
             "Listing certificates for email=%s success=%s",
             request.email,
             request.success,
         )
 
-        certificates = self.certificate_repository.get_by_participant_email(request.email)
+        certificates = self.certificate_repository.get_by_participant_email(
+            request.email
+        )
 
         if request.success is not None:
             certificates = [
-                certificate for certificate in certificates if certificate.success is request.success
+                certificate
+                for certificate in certificates
+                if certificate.success is request.success
             ]
 
         sorted_certificates = sorted(
@@ -44,7 +50,9 @@ class ListUserCertificates:
 
         return ListUserCertificatesResponseDto(
             email=request.email,
-            certificates=[self._to_item_dto(certificate) for certificate in sorted_certificates],
+            certificates=[
+                self._to_item_dto(certificate) for certificate in sorted_certificates
+            ],
         )
 
     def _to_item_dto(self, certificate: Certificate) -> UserCertificateItemDto:

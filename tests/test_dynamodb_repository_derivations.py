@@ -30,7 +30,9 @@ sys.modules.setdefault("boto3", boto3_module)
 from src.domain.entity.certificate import Certificate
 from src.domain.entity.order import Order
 from src.domain.entity.product import Product
-from src.infrastructure.repository.certificate_repository_impl import CertificateRepositoryImpl
+from src.infrastructure.repository.certificate_repository_impl import (
+    CertificateRepositoryImpl,
+)
 from src.infrastructure.repository.order_repository_impl import OrderRepositoryImpl
 from src.infrastructure.repository.product_repository_impl import ProductRepositoryImpl
 

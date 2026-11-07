@@ -1,5 +1,6 @@
 from pydantic import BaseModel
 
+
 class Order(BaseModel):
     order_id: int
     order_date: str
@@ -12,4 +13,3 @@ class Order(BaseModel):
     participant_email: str
     participant_first_name: str
     participant_last_name: str
-

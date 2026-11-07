@@ -18,12 +18,12 @@ def create_api_gateway_event(
 ) -> dict:
     """
     Cria um evento simulado do API Gateway REST.
-    
+
     Args:
         method: Método HTTP (GET, POST, etc.)
         path: Caminho da requisição
         body: Corpo da requisição (opcional)
-        
+
     Returns:
         Evento formatado para API Gateway REST
     """
@@ -32,10 +32,7 @@ def create_api_gateway_event(
         "path": path,
         "pathParameters": path_parameters,
         "queryStringParameters": query_string_parameters,
-        "headers": {
-            "Content-Type": "application/json",
-            "Accept": "application/json"
-        },
+        "headers": {"Content-Type": "application/json", "Accept": "application/json"},
         "body": json.dumps(body) if body else None,
         "isBase64Encoded": False,
         "requestContext": {
@@ -43,16 +40,14 @@ def create_api_gateway_event(
             "path": path,
             "stage": "test",
             "requestId": "test-request-id-123",
-            "identity": {
-                "sourceIp": "127.0.0.1"
-            }
-        }
+            "identity": {"sourceIp": "127.0.0.1"},
+        },
     }
 
 
 class MockLambdaContext:
     """Contexto Lambda simulado para testes locais."""
-    
+
     def __init__(self):
         self.function_name = "certified-builder-local-test"
         self.function_version = "$LATEST"
@@ -67,50 +62,46 @@ class MockLambdaContext:
 def test_create_certificate():
     """Testa o endpoint de criação de certificados."""
     print("🧪 Testando endpoint de criação de certificados...")
-    
+
     # Dados de teste
-    request_data = {
-        "product_id": "316"
-    }
-    
+    request_data = {"product_id": "316"}
+
     # Cria evento simulado
     event = create_api_gateway_event(
-        method="POST",
-        path="/api/v1/certificate/create",
-        body=request_data
+        method="POST", path="/api/v1/certificate/create", body=request_data
     )
-    
+
     # Contexto simulado
     context = MockLambdaContext()
-    
+
     try:
         # Chama o handler da Lambda
         print(f"Enviando requisição: {json.dumps(request_data, indent=2)}")
         response = lambda_handler(event, context)
-        
+
         # Exibe resposta
         print("Resposta recebida:")
         print(f"Status Code: {response.get('statusCode', 'N/A')}")
-        
+
         # Tenta fazer parse do body se for string
-        body = response.get('body', {})
+        body = response.get("body", {})
         if isinstance(body, str):
             try:
                 body = json.loads(body)
             except json.JSONDecodeError:
                 pass
-        
+
         print(f"   Body: {json.dumps(body, indent=2, ensure_ascii=False)}")
-        
+
         # Verifica se foi sucesso
-        status_code = response.get('statusCode', 500)
+        status_code = response.get("statusCode", 500)
         if 200 <= status_code < 300:
             print("Teste executado com sucesso!")
         else:
             print("Teste falhou!")
-            
+
         return response
-        
+
     except Exception as e:
         print(f"Erro durante o teste: {e}")
         return None
@@ -139,7 +130,7 @@ def test_list_user_certificates(email: str, success: str = None):
         print("Resposta recebida:")
         print(f"Status Code: {response.get('statusCode', 'N/A')}")
 
-        body = response.get('body', {})
+        body = response.get("body", {})
         if isinstance(body, str):
             try:
                 body = json.loads(body)
@@ -148,7 +139,7 @@ def test_list_user_certificates(email: str, success: str = None):
 
         print(f"   Body: {json.dumps(body, indent=2, ensure_ascii=False)}")
 
-        status_code = response.get('statusCode', 500)
+        status_code = response.get("statusCode", 500)
         if 200 <= status_code < 300:
             print("Teste executado com sucesso!")
         else:
@@ -163,204 +154,198 @@ def test_list_user_certificates(email: str, success: str = None):
 def test_fetch_certificate_by_order_id():
     """Testa o endpoint de busca de certificados."""
     print("🧪 Testando endpoint de busca de certificados...")
-    
+
     # Dados de teste (query params devem ser strings)
-    request_data = {
-        "order_id": "1826"
-    }
-    
+    request_data = {"order_id": "1826"}
+
     # Cria evento simulado
     event = create_api_gateway_event(
         method="GET",
         path="/api/v1/certificate/fetch",
-        query_string_parameters=request_data
+        query_string_parameters=request_data,
     )
-    
+
     # Contexto simulado
     context = MockLambdaContext()
-    
+
     try:
         # Chama o handler da Lambda
         print(f"Enviando requisição: {json.dumps(request_data, indent=2)}")
         response = lambda_handler(event, context)
-        
+
         # Exibe resposta
         print("Resposta recebida:")
         print(f"Status Code: {response.get('statusCode', 'N/A')}")
-        
+
         # Tenta fazer parse do body se for string
-        body = response.get('body', {})
+        body = response.get("body", {})
         if isinstance(body, str):
             try:
                 body = json.loads(body)
             except json.JSONDecodeError:
                 pass
-        
+
         print(f"   Body: {json.dumps(body, indent=2, ensure_ascii=False)}")
-        
+
         # Verifica se foi sucesso
-        status_code = response.get('statusCode', 500)
+        status_code = response.get("statusCode", 500)
         if 200 <= status_code < 300:
             print("Teste executado com sucesso!")
         else:
             print("Teste falhou!")
-            
+
         return response
-        
+
     except Exception as e:
         print(f"Erro durante o teste: {e}")
         return None
+
 
 def test_fetch_certificate_by_product_id():
     """Testa o endpoint de busca de certificados por product_id."""
     print("🧪 Testando endpoint de busca de certificados por product_id...")
-    
+
     # Dados de teste (query params devem ser strings)
-    request_data = {
-        "product_id": "1678"
-    }
-    
+    request_data = {"product_id": "1678"}
+
     # Cria evento simulado
     event = create_api_gateway_event(
         method="GET",
         path="/api/v1/certificate/fetch",
-        query_string_parameters=request_data
+        query_string_parameters=request_data,
     )
-    
+
     # Contexto simulado
     context = MockLambdaContext()
-    
+
     try:
         # Chama o handler da Lambda
         print(f"Enviando requisição: {json.dumps(request_data, indent=2)}")
         response = lambda_handler(event, context)
-        
+
         # Exibe resposta
         print("Resposta recebida:")
         print(f"Status Code: {response.get('statusCode', 'N/A')}")
-        
+
         # Tenta fazer parse do body se for string
-        body = response.get('body', {})
+        body = response.get("body", {})
         if isinstance(body, str):
             try:
                 body = json.loads(body)
             except json.JSONDecodeError:
                 pass
-        
+
         print(f"   Body: {json.dumps(body, indent=2, ensure_ascii=False)}")
-        
+
         # Verifica se foi sucesso
-        status_code = response.get('statusCode', 500)
+        status_code = response.get("statusCode", 500)
         if 200 <= status_code < 300:
             print("Teste executado com sucesso!")
         else:
             print("Teste falhou!")
-            
+
         return response
-        
+
     except Exception as e:
         print(f"Erro durante o teste: {e}")
         return None
+
 
 def test_fetch_certificate_by_email():
     """Testa o endpoint de busca de certificados por email."""
     print("🧪 Testando endpoint de busca de certificados por email...")
-    
+
     # Dados de teste
-    request_data = {
-        "email": "suzi.harima94@gmail.com"
-    }
-    
+    request_data = {"email": "alex@example.test"}
+
     # Cria evento simulado
     event = create_api_gateway_event(
         method="GET",
         path="/api/v1/certificate/fetch",
-        query_string_parameters=request_data
+        query_string_parameters=request_data,
     )
-    
+
     # Contexto simulado
     context = MockLambdaContext()
-    
+
     try:
         # Chama o handler da Lambda
         print(f"Enviando requisição: {json.dumps(request_data, indent=2)}")
         response = lambda_handler(event, context)
-        
+
         # Exibe resposta
         print("Resposta recebida:")
         print(f"Status Code: {response.get('statusCode', 'N/A')}")
-        
+
         # Tenta fazer parse do body se for string
-        body = response.get('body', {})
+        body = response.get("body", {})
         if isinstance(body, str):
             try:
                 body = json.loads(body)
             except json.JSONDecodeError:
                 pass
-        
+
         print(f"   Body: {json.dumps(body, indent=2, ensure_ascii=False)}")
-        
+
         # Verifica se foi sucesso
-        status_code = response.get('statusCode', 500)
+        status_code = response.get("statusCode", 500)
         if 200 <= status_code < 300:
             print("Teste executado com sucesso!")
         else:
             print("Teste falhou!")
-            
+
         return response
-        
+
     except Exception as e:
         print(f"Erro durante o teste: {e}")
         return None
 
+
 def test_fetch_certificate_by_email_and_product_id():
     """Testa o endpoint de busca de certificados por email e product_id."""
     print("🧪 Testando endpoint de busca de certificados por email e product_id...")
-    
+
     # Dados de teste
-    request_data = {
-        "email": "suzi.harima94@gmail.com",
-        "product_id": "1678"
-    }
-    
+    request_data = {"email": "alex@example.test", "product_id": "42"}
+
     # Cria evento simulado
     event = create_api_gateway_event(
         method="GET",
         path="/api/v1/certificate/fetch",
-        query_string_parameters=request_data
+        query_string_parameters=request_data,
     )
-    
+
     # Contexto simulado
     context = MockLambdaContext()
-    
+
     try:
         # Chama o handler da Lambda
         print(f"Enviando requisição: {json.dumps(request_data, indent=2)}")
         response = lambda_handler(event, context)
-        
+
         # Exibe resposta
         print("Resposta recebida:")
         print(f"Status Code: {response.get('statusCode', 'N/A')}")
-        
+
         # Tenta fazer parse do body se for string
-        body = response.get('body', {})
+        body = response.get("body", {})
         if isinstance(body, str):
             try:
                 body = json.loads(body)
             except json.JSONDecodeError:
                 pass
-        
+
         print(f"   Body: {json.dumps(body, indent=2, ensure_ascii=False)}")
-        
+
         # Verifica se foi sucesso
-        status_code = response.get('statusCode', 500)
+        status_code = response.get("statusCode", 500)
         if 200 <= status_code < 300:
             print("Teste executado com sucesso!")
         else:
             print("Teste falhou!")
-            
+
         return response
-        
+
     except Exception as e:
         print(f"Erro durante o teste: {e}")
         return None
@@ -369,9 +354,9 @@ def test_fetch_certificate_by_email_and_product_id():
 if __name__ == "__main__":
     # Executa os testes
     # test_create_certificate()
-    # test_list_user_certificates("suzi.harima94@gmail.com")
-    # test_list_user_certificates("suzi.harima94@gmail.com", success="true")
-    # test_list_user_certificates("suzi.harima94@gmail.com", success="false")
+    # test_list_user_certificates("alex@example.test")
+    # test_list_user_certificates("alex@example.test", success="true")
+    # test_list_user_certificates("alex@example.test", success="false")
     test_fetch_certificate_by_order_id()
     test_fetch_certificate_by_product_id()
     test_fetch_certificate_by_email()

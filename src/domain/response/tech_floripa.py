@@ -1,6 +1,7 @@
 from pydantic import BaseModel
 from typing import Optional
 
+
 class TechOrdersResponse(BaseModel):
     order_id: int
     first_name: str
@@ -13,7 +14,6 @@ class TechOrdersResponse(BaseModel):
     certificate_background: str
     order_date: str
     time_checkin: Optional[str]
-
 
     # method to check if time_checkin is not None
     def is_empty_time_checkin(self) -> bool:

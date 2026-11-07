@@ -65,7 +65,7 @@ Cria múltiplos certificados a partir de uma lista de dados recebida diretamente
         "order_id": 1234,
         "first_name": "João",
         "last_name": "Silva",
-        "email": "joao.silva@example.com",
+        "email": "alex@example.test",
         "product_id": 5678,
         "product_name": "Workshop de Python Avançado",
         "certificate_details": "In recognition of their participation in the Workshop de Python Avançado, held on January 15, 2025, at IFSC – Câmpus Florianópolis, Brazil, with a total duration of 8 hours.",
@@ -78,7 +78,7 @@ Cria múltiplos certificados a partir de uma lista de dados recebida diretamente
         "order_id": 1235,
         "first_name": "Maria",
         "last_name": "Santos",
-        "email": "maria.santos@example.com",
+        "email": "morgan@example.test",
         "product_id": 5678,
         "product_name": "Workshop de Python Avançado",
         "certificate_details": "In recognition of their participation in the Workshop de Python Avançado, held on January 15, 2025, at IFSC – Câmpus Florianópolis, Brazil, with a total duration of 8 hours.",
@@ -211,13 +211,13 @@ Gera uma página para download de um certificado.
 ## Exemplos Locais
 
 - Listar todos os certificados de um e-mail:
-  - `test_list_user_certificates("suzi.harima94@gmail.com")`
+  - `test_list_user_certificates("alex@example.test")`
 - Listar apenas certificados com sucesso:
-  - `test_list_user_certificates("suzi.harima94@gmail.com", success="true")`
+  - `test_list_user_certificates("alex@example.test", success="true")`
 - Listar apenas certificados com falha:
-  - `test_list_user_certificates("suzi.harima94@gmail.com", success="false")`
+  - `test_list_user_certificates("alex@example.test", success="false")`
 - Testar e-mail com URL encoding:
-  - `test_list_user_certificates("user+qa@example.com")`
+  - `test_list_user_certificates("alex+qa@example.test")`
 
 ## DynamoDB Single-Table Design
 
